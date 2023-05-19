@@ -39,7 +39,6 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
             "node_modules/patternfly/dist/css/patternfly-additions.min.css",
             "lib/zocial/zocial.css"
         ],
-        "styles": ["css/login.css"],
         "htmlClassName": getClassName("kcHtmlClass"),
         "bodyClassName": undefined
     });
@@ -50,90 +49,85 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 
     return (
         <div className={getClassName("kcLoginClass")}>
-            <div id="kc-header" className={getClassName("kcHeaderClass")}>
-                <div id="kc-header-wrapper" className={getClassName("kcHeaderWrapperClass")}>
-                    {msg("loginTitleHtml", realm.displayNameHtml)}
-                </div>
-            </div>
-
             <div className={clsx(getClassName("kcFormCardClass"), displayWide && getClassName("kcFormCardAccountClass"))}>
                 <header className={getClassName("kcFormHeaderClass")}>
-                    {realm.internationalizationEnabled && (assert(locale !== undefined), true) && locale.supported.length > 1 && (
-                        <div id="kc-locale">
-                            <div id="kc-locale-wrapper" className={getClassName("kcLocaleWrapperClass")}>
-                                <div className="kc-dropdown" id="kc-locale-dropdown">
-                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                    <a href="#" id="kc-current-locale-link">
-                                        {labelBySupportedLanguageTag[currentLanguageTag]}
-                                    </a>
-                                    <ul>
-                                        {locale.supported.map(({ languageTag }) => (
-                                            <li key={languageTag} className="kc-dropdown-item">
-                                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                                <a href="#" onClick={() => changeLocale(languageTag)}>
-                                                    {labelBySupportedLanguageTag[languageTag]}
+                    
+                        {!(auth !== undefined && auth.showUsername && !auth.showResetCredentials) ? (
+                                displayRequiredFields ? (
+                                    <div className={getClassName("kcContentWrapperClass")}>
+                                        <div className={clsx(getClassName("kcLabelWrapperClass"), "subtitle")}>
+                                            <span className="subtitle">
+                                                <span className="required">*</span>
+                                                {msg("requiredFields")}
+                                            </span>
+                                        </div>
+                                        <div className="col-md-10">
+                                            {headerNode}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <>{headerNode}</>
+                                )
+                            ) : displayRequiredFields ? (
+                                <div className={getClassName("kcContentWrapperClass")}>
+                                    <div className={clsx(getClassName("kcLabelWrapperClass"), "subtitle")}>
+                                        <span className="subtitle">
+                                            <span className="required">*</span> {msg("requiredFields")}
+                                        </span>
+                                    </div>
+                                    <div className="col-md-10">
+                                        {showUsernameNode}
+                                        <div className={getClassName("kcFormGroupClass")}>
+                                            <div id="kc-username">
+                                                <label id="kc-attempted-username">{auth?.attemptedUsername}</label>
+                                                <a id="reset-login" href={url.loginRestartFlowUrl}>
+                                                    <div className="kc-login-tooltip">
+                                                        <i className={getClassName("kcResetFlowIcon")}></i>
+                                                        <span className="kc-tooltip-text">{msg("restartLoginTooltip")}</span>
+                                                    </div>
                                                 </a>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                    {!(auth !== undefined && auth.showUsername && !auth.showResetCredentials) ? (
-                        displayRequiredFields ? (
-                            <div className={getClassName("kcContentWrapperClass")}>
-                                <div className={clsx(getClassName("kcLabelWrapperClass"), "subtitle")}>
-                                    <span className="subtitle">
-                                        <span className="required">*</span>
-                                        {msg("requiredFields")}
-                                    </span>
-                                </div>
-                                <div className="col-md-10">
-                                    <h1 id="kc-page-title">{headerNode}</h1>
-                                </div>
-                            </div>
-                        ) : (
-                            <h1 id="kc-page-title">{headerNode}</h1>
-                        )
-                    ) : displayRequiredFields ? (
-                        <div className={getClassName("kcContentWrapperClass")}>
-                            <div className={clsx(getClassName("kcLabelWrapperClass"), "subtitle")}>
-                                <span className="subtitle">
-                                    <span className="required">*</span> {msg("requiredFields")}
-                                </span>
-                            </div>
-                            <div className="col-md-10">
-                                {showUsernameNode}
-                                <div className={getClassName("kcFormGroupClass")}>
-                                    <div id="kc-username">
-                                        <label id="kc-attempted-username">{auth?.attemptedUsername}</label>
-                                        <a id="reset-login" href={url.loginRestartFlowUrl}>
-                                            <div className="kc-login-tooltip">
-                                                <i className={getClassName("kcResetFlowIcon")}></i>
-                                                <span className="kc-tooltip-text">{msg("restartLoginTooltip")}</span>
                                             </div>
-                                        </a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    ) : (
-                        <>
-                            {showUsernameNode}
-                            <div className={getClassName("kcFormGroupClass")}>
-                                <div id="kc-username">
-                                    <label id="kc-attempted-username">{auth?.attemptedUsername}</label>
-                                    <a id="reset-login" href={url.loginRestartFlowUrl}>
-                                        <div className="kc-login-tooltip">
-                                            <i className={getClassName("kcResetFlowIcon")}></i>
-                                            <span className="kc-tooltip-text">{msg("restartLoginTooltip")}</span>
+                            ) : (
+                                <>
+                                    {showUsernameNode}
+                                    <div className={getClassName("kcFormGroupClass")}>
+                                        <div id="kc-username">
+                                            <label id="kc-attempted-username">{auth?.attemptedUsername}</label>
+                                            <a id="reset-login" href={url.loginRestartFlowUrl}>
+                                                <div className="kc-login-tooltip">
+                                                    <i className={getClassName("kcResetFlowIcon")}></i>
+                                                    <span className="kc-tooltip-text">{msg("restartLoginTooltip")}</span>
+                                                </div>
+                                            </a>
                                         </div>
-                                    </a>
+                                    </div>
+                                </>
+                            )}
+                            {realm.internationalizationEnabled && (assert(locale !== undefined), true) && locale.supported.length > 1 && (
+                                <div id="kc-locale">
+                                    <div id="kc-locale-wrapper" className={getClassName("kcLocaleWrapperClass")}>
+                                        <div className="kc-dropdown" id="kc-locale-dropdown">
+                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                            <a href="#" id="kc-current-locale-link">
+                                                {labelBySupportedLanguageTag[currentLanguageTag]}
+                                            </a>
+                                            <ul>
+                                                {locale.supported.map(({ languageTag }) => (
+                                                    <li key={languageTag} className="kc-dropdown-item">
+                                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                                        <a href="#" onClick={() => changeLocale(languageTag)}>
+                                                            {labelBySupportedLanguageTag[languageTag]}
+                                                        </a>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </>
-                    )}
+                            )}
                 </header>
                 <div id="kc-content">
                     <div id="kc-content-wrapper">

@@ -40,7 +40,15 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
             {...{ kcContext, i18n, doUseDefaultCss, classes }}
             displayInfo={social.displayInfo}
             displayWide={realm.password && social.providers !== undefined}
-            headerNode={msg("doLogIn")}
+            headerNode={
+                <div>                                  
+                    <div className="flex justify-center pb-8">
+                        <img src={require("./../assets/logo-dark.png") } className="h-12 w-12"/>
+                    </div>
+                    <h1 >Meet BuildBetter</h1>
+                    <p className="text-center">Give your product operations superpowers.</p>
+                </div>
+            }
             infoNode={
                 realm.password &&
                 realm.registrationAllowed &&
@@ -55,7 +63,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                     </div>
                 )
             }
-        >
+        >   
             <div id="kc-form" className={clsx(realm.password && social.providers !== undefined && getClassName("kcContentWrapperClass"))}>
                 <div
                     id="kc-form-wrapper"
@@ -65,7 +73,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                     )}
                 >
                     {realm.password && (
-                        <form id="kc-form-login" onSubmit={onSubmit} action={url.loginAction} method="post">
+                        <form id="kc-form-login" className={getClassName("kcFormClass")} onSubmit={onSubmit} action={url.loginAction} method="post">
                             <div className={getClassName("kcFormGroupClass")}>
                                 {(() => {
                                     const label = !realm.loginWithEmailAllowed
@@ -116,7 +124,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                 />
                             </div>
                             <div className={clsx(getClassName("kcFormGroupClass"), getClassName("kcFormSettingClass"))}>
-                                <div id="kc-form-options">
+                                <div id="kc-form-options" >
                                     {realm.rememberMe && !usernameEditDisabled && (
                                         <div className="checkbox">
                                             <label>
@@ -146,7 +154,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     )}
                                 </div>
                             </div>
-                            <div id="kc-form-buttons" className={getClassName("kcFormGroupClass")}>
+                            <div id="kc-form-buttons" className={getClassName("kcFormButtonsClass")}>
                                 <input
                                     type="hidden"
                                     id="id-hidden-input"

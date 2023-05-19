@@ -15,6 +15,7 @@ const Login = lazy(() => import("./pages/Login"));
 // If you can, favor register-user-profile.ftl over register.ftl, see: https://docs.keycloakify.dev/realtime-input-validation
 const Register = lazy(() => import("./pages/Register"));
 const RegisterUserProfile = lazy(() => import("./pages/RegisterUserProfile"));
+const LoginResetPassword = lazy(() => import("./pages/LoginResetPassword"));
 const Terms = lazy(() => import("./pages/Terms"));
 const MyExtraPage1 = lazy(() => import("./pages/MyExtraPage1"));
 const MyExtraPage2 = lazy(() => import("./pages/MyExtraPage2"));
@@ -23,9 +24,7 @@ const Info = lazy(() => import("keycloakify/login/pages/Info"));
 // This is like adding classes to theme.properties 
 // https://github.com/keycloak/keycloak/blob/11.0.3/themes/src/main/resources/theme/keycloak/login/theme.properties
 const classes: PageProps<any, any>["classes"] = {
-    // NOTE: The classes are defined in ./KcApp.css
-    "kcHtmlClass": "my-root-class",
-    "kcHeaderWrapperClass": "my-color my-font"
+    // NOTE: The classes are defined in ./KcApp.cssl,
 };
 
 export default function KcApp(props: { kcContext: KcContext; }) {
@@ -53,6 +52,7 @@ export default function KcApp(props: { kcContext: KcContext; }) {
                     case "login.ftl": return <Login {...{ kcContext, i18n, Template, classes }} doUseDefaultCss={true} />;
                     case "register.ftl": return <Register {...{ kcContext, i18n, Template, classes }} doUseDefaultCss={true} />;
                     case "register-user-profile.ftl": return <RegisterUserProfile {...{ kcContext, i18n, Template, classes }} doUseDefaultCss={true} />
+                    case "login-reset-password.ftl": return <LoginResetPassword {...{ kcContext, i18n, Template, classes }} doUseDefaultCss={true} />
                     case "terms.ftl": return <Terms {...{ kcContext, i18n, Template, classes }} doUseDefaultCss={true} />;
                     case "my-extra-page-1.ftl": return <MyExtraPage1 {...{ kcContext, i18n, Template, classes }} doUseDefaultCss={true} />;
                     case "my-extra-page-2.ftl": return <MyExtraPage2 {...{ kcContext, i18n, Template, classes }} doUseDefaultCss={true} />;
