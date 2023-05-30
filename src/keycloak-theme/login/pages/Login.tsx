@@ -30,7 +30,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
     const validateEmail = () => {
         if (!email) {
             setErrors("Required")
-        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,24}$/i.test(email)) {
+        } else if (!/^[\w.%+-]+@[^_\W.-]+\.[A-Za-z]{2,24}$/g.test(email)) {
             setErrors("Invalid email address");
         }
         else {
@@ -134,7 +134,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                                           "autoComplete": "off"
                                                       })}
                                                 required
-                                                pattern="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,24}$"
+                                                pattern="^[\w.%+-]+@[^_\W.-]+\.[A-Za-z]{2,24}$"
                                             />
                                             {!!errors ? (
                                                 <FormInputError message={errors} />   
