@@ -1,12 +1,12 @@
 // ejected using 'npx eject-keycloak-page'
-import { useState, type FormEventHandler } from "react";
+import { useState, useEffect, type FormEventHandler } from "react";
 import { clsx } from "keycloakify/tools/clsx";
 import { useConstCallback } from "keycloakify/tools/useConstCallback";
 import type { PageProps } from "keycloakify/login/pages/PageProps";
 import { useGetClassName } from "keycloakify/login/lib/useGetClassName";
 import type { KcContext } from "../kcContext";
 import type { I18n } from "../i18n";
-import { useEffect } from "@storybook/addons";
+import { FormInputError } from "./shared/FormInputError";
 
 export default function Login(props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>) {
     const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
@@ -37,12 +37,6 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
             setErrors("");
         }        
     };
-    const handleChangeEmail = useConstCallback<FormEventHandler<HTMLInputElement>>(e => {
-        setEmail((e.target as HTMLInputElement).value);
-        if (wasSubmitted) {
-            validateEmail();
-        }
-    });
     const onSubmit = useConstCallback<FormEventHandler<HTMLFormElement>>(e => {
         e.preventDefault();
         setWasSubmitted(true);
@@ -60,8 +54,13 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
         else {
             validateEmail();
         }
-
     });
+
+    useEffect(() => {
+        if (wasSubmitted) {
+            validateEmail();
+        }
+    }, [email]);
     return (
         <Template
             {...{ kcContext, i18n, doUseDefaultCss, classes }}
@@ -124,8 +123,8 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                                 //the browser how to pre fill the form but before submit we put it back
                                                 //to username because it is what keycloak expects.
                                                 name={autoCompleteHelper}
-                                                defaultValue={ email}
-                                                onChange={ handleChangeEmail }
+                                                defaultValue={ email }
+                                                onChange={ (e) => setEmail((e.target as HTMLInputElement).value) }
                                                 type="text"
                                                 placeholder="Email Address"
                                                 {...(usernameEditDisabled
@@ -138,10 +137,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                                 pattern="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,24}$"
                                             />
                                             {!!errors ? (
-                                            <span className="input-error">
-                                                <svg viewBox="0 0 22 21" focusable="false"><path d="M11 12.5C10.59 12.5 10.25 12.16 10.25 11.75V6.75C10.25 6.34 10.59 6 11 6C11.41 6 11.75 6.34 11.75 6.75V11.75C11.75 12.16 11.41 12.5 11 12.5Z" fill="currentColor"></path><path d="M11 16C10.73 16 10.48 15.9 10.29 15.71C10.2 15.61 10.13 15.5 10.08 15.38C10.03 15.26 10 15.13 10 15C10 14.87 10.03 14.74 10.08 14.62C10.13 14.49 10.2 14.39 10.29 14.29C10.66 13.92 11.34 13.92 11.71 14.29C11.8 14.39 11.87 14.49 11.92 14.62C11.97 14.74 12 14.87 12 15C12 15.13 11.97 15.26 11.92 15.38C11.87 15.5 11.8 15.61 11.71 15.71C11.52 15.9 11.27 16 11 16Z" fill="currentColor"></path><path d="M10.9901 20.9999C8.41006 20.9999 5.97006 20.0299 4.10006 18.2399C2.17006 16.3999 1.07006 13.9099 1.00006 11.2399C0.930057 8.56994 1.92006 6.03994 3.76006 4.09994C5.60006 2.16994 8.09006 1.06994 10.7601 0.99994C13.4201 0.93994 15.9701 1.90994 17.9001 3.75994C19.8301 5.59994 20.9301 8.08994 21.0001 10.7599C21.0601 13.4299 20.0901 15.9699 18.2401 17.8999C16.4001 19.8299 13.9101 20.9299 11.2401 20.9999C11.1601 20.9999 11.0801 20.9999 10.9901 20.9999ZM11.0101 2.49994C10.9401 2.49994 10.8701 2.49994 10.8001 2.49994C8.52006 2.55994 6.41006 3.48994 4.85006 5.13994C3.28006 6.77994 2.45006 8.93994 2.51006 11.2099C2.56006 13.4799 3.50006 15.5899 5.14006 17.1599C6.78006 18.7299 8.93006 19.5599 11.2101 19.4999C13.4801 19.4499 15.5901 18.5099 17.1601 16.8699C18.7301 15.2299 19.5601 13.0699 19.5001 10.7999C19.4501 8.52994 18.5101 6.41994 16.8701 4.84994C15.2701 3.32994 13.2001 2.49994 11.0101 2.49994Z" fill="currentColor"></path></svg>
-                                                {errors}
-                                            </span>                                
+                                                <FormInputError message={errors} />   
                                             ) : null}
                                         </>
                                     );
@@ -180,7 +176,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     <div className="mb-1">
                                     {realm.resetPasswordAllowed && (                                        
                                         <span>
-                                            <svg viewBox="0 0 20 19" focusable="false" className="h-4 mr-1"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.29749 8.56792C8.29749 7.50738 9.09098 6.73624 9.94018 6.73624C10.8284 6.73624 11.5829 7.54841 11.5829 8.36145V9.58237H8.29749V8.56792ZM6.79749 9.70692V8.56792C6.79749 6.78837 8.15722 5.23624 9.94018 5.23624C11.6839 5.23624 13.0829 6.74734 13.0829 8.36145V9.70677C14.5313 10.1094 15.6007 11.4422 15.6007 13.0156V15.4841C15.6007 17.3738 14.0576 18.9173 12.1675 18.9173H7.71348C5.82335 18.9173 4.28027 17.374 4.28027 15.4841V13.0156C4.28027 11.4424 5.34922 10.1097 6.79749 9.70692ZM5.78027 13.0156C5.78027 11.9539 6.65181 11.0824 7.71348 11.0824H12.1675C13.229 11.0824 14.1007 11.9539 14.1007 13.0156V15.4841C14.1007 16.5455 13.2291 17.4173 12.1675 17.4173H7.71348C6.65184 17.4173 5.78027 16.5456 5.78027 15.4841V13.0156Z" fill="currentColor"></path><path d="M18.8084 7.91959C17.8455 3.94868 14.2671 1 10.0004 1C5.73318 1 2.15495 3.94892 1.19238 7.91967V2.04475" fill="None" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                            <svg viewBox="0 0 20 19" focusable="false" className="h-4 mr-1"><path fillRule="evenodd" clipRule="evenodd" d="M8.29749 8.56792C8.29749 7.50738 9.09098 6.73624 9.94018 6.73624C10.8284 6.73624 11.5829 7.54841 11.5829 8.36145V9.58237H8.29749V8.56792ZM6.79749 9.70692V8.56792C6.79749 6.78837 8.15722 5.23624 9.94018 5.23624C11.6839 5.23624 13.0829 6.74734 13.0829 8.36145V9.70677C14.5313 10.1094 15.6007 11.4422 15.6007 13.0156V15.4841C15.6007 17.3738 14.0576 18.9173 12.1675 18.9173H7.71348C5.82335 18.9173 4.28027 17.374 4.28027 15.4841V13.0156C4.28027 11.4424 5.34922 10.1097 6.79749 9.70692ZM5.78027 13.0156C5.78027 11.9539 6.65181 11.0824 7.71348 11.0824H12.1675C13.229 11.0824 14.1007 11.9539 14.1007 13.0156V15.4841C14.1007 16.5455 13.2291 17.4173 12.1675 17.4173H7.71348C6.65184 17.4173 5.78027 16.5456 5.78027 15.4841V13.0156Z" fill="currentColor"></path><path d="M18.8084 7.91959C17.8455 3.94868 14.2671 1 10.0004 1C5.73318 1 2.15495 3.94892 1.19238 7.91967V2.04475" fill="None" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                                             <a tabIndex={5} href={url.loginResetCredentialsUrl}>
                                                 Forgot Password?
                                             </a>
