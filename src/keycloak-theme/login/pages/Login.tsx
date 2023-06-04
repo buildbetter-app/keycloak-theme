@@ -1,5 +1,5 @@
 // ejected using 'npx eject-keycloak-page'
-import { useState, useEffect, type FormEventHandler } from "react";
+import { useState, useEffect, type FormEventHandler, useMemo } from "react";
 import { clsx } from "keycloakify/tools/clsx";
 import { useConstCallback } from "keycloakify/tools/useConstCallback";
 import type { PageProps } from "keycloakify/login/pages/PageProps";
@@ -20,9 +20,18 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
 
     const { msg, msgStr } = i18n;
 
+    const [paramEmail, paramTempPassword] = useMemo(() => {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const paramEmail = urlParams.get("email");
+        const paramTempPassword = urlParams.get("password");
+        return [paramEmail, paramTempPassword];
+    }, [window.location.search]);
+    
+
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const [rememberMe, setRememberMe] = useState(login.rememberMe === "on");
-    const [email, setEmail] = useState(login.username ?? "");
+    const [email, setEmail] = useState(paramEmail ?? login.username ?? "");
     const [errors, setErrors] = useState("");
     const [wasSubmitted, setWasSubmitted] = useState(false);
     
@@ -152,6 +161,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     type="password"
                                     autoComplete="off"
                                     placeholder="Password"
+                                    value={paramTempPassword ?? undefined}
                                 />
                             </div>
                             <div className={clsx(getClassName("kcFormGroupClass"), getClassName("kcFormSettingClass"))}>                                
