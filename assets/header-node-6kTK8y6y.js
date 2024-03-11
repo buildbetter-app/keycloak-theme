@@ -1,0 +1,2 @@
+import{j as e}from"./index-C5PdjIHg.js";import{T as l}from"./KcApp-Jtyk8-3-.js";const o="/assets/logo-dark-DHpxJtxE.png",n=({title:s,subtitle:t,asset:r,children:x})=>e.jsxs("div",{className:"text-white flex flex-col space-y-2",children:[e.jsx("div",{className:"flex justify-center pb-8",children:r||e.jsx("img",{src:o,className:"h-12 w-12"})}),s&&e.jsx("h1",{className:"text-3xl text-white self-center font-bold",children:s}),t&&e.jsx(l,{color:"GrayText",textAlign:"center",fontSize:"small",children:t}),x]});export{n as H};
+//# sourceMappingURL=header-node-6kTK8y6y.js.map
