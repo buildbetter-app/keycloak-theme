@@ -13,7 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
-      - uses: bahmutov/npm-install@v1
+        with:
+          node-version: "24.22.1"
+      - run: corepack enable
+      - run: yarn install --immutable
       - run: yarn build
       - run: npx keycloakify
 
@@ -41,7 +44,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
-      - uses: bahmutov/npm-install@v1
+        with:
+          node-version: "24.22.1"
+      - run: corepack enable
+      - run: yarn install --immutable
       - run: yarn build
       - run: npx keycloakify
       - run: mv dist_keycloak/target/retrocompat-*.jar retrocompat-keycloak-theme.jar
@@ -94,7 +100,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
-      - uses: bahmutov/npm-install@v1
+        with:
+          node-version: "24.22.1"
+      - run: corepack enable
+      - run: yarn install --immutable
       - run: yarn build
       # We tell GitHub pages that our package.json["homepage"] field is our domain name.
       # If you wish to use the default GitHub pages domain name, like https://<username>.github.io/<repo>,
@@ -104,4 +113,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-node@v3.6.0
+        with:
+          node-version: "24.22.1"
       - run: npx -y -p gh-pages@3.0.0 gh-pages -u "github-actions-bot <actions@github.com>" -d dist

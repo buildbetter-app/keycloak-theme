@@ -18,12 +18,15 @@ This starter is based on Vite. There is also [a Webpack based starter](https://g
 
 # Quick start
 
+Use Node 24.22.1. Corepack selects Yarn 4.1.0 from `packageManager` in `package.json`; immutable installs preserve the committed dependency versions.
+
 ```bash
-git clone https://github.com/keycloakify/keycloakify-starter
+git clone https://github.com/buildbetter-app/keycloak-theme
 
-cd keycloakify-starter
+cd keycloak-theme
 
-yarn # install dependencies (it's like npm install)
+corepack enable
+yarn install --immutable
 
 yarn storybook # Start Storybook
                # This is by far the best way to develop your theme
@@ -90,7 +93,8 @@ You can enable this feature by providing multiple theme name in the Keycloakify 
 ![image](https://github.com/keycloakify/keycloakify/assets/6702424/a18ac1ff-dcfd-4b8c-baed-dcda5aa1d762)
 
 ```bash
-yarn
+corepack enable
+yarn install --immutable
 yarn storybook
 ```
 
@@ -168,7 +172,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
-    - uses: bahmutov/npm-install@v1
+      with:
+        node-version: "24.22.1"
+    - run: corepack enable
+    - run: yarn install --immutable
     - run: yarn build
     - run: npx keycloakify
 
@@ -196,7 +203,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
-    - uses: bahmutov/npm-install@v1
+      with:
+        node-version: "24.22.1"
+    - run: corepack enable
+    - run: yarn install --immutable
     - run: yarn build
     - run: npx keycloakify
     - run: mv dist_keycloak/target/retrocompat-*.jar retrocompat-keycloak-theme.jar

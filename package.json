@@ -8,6 +8,7 @@
     "url": "git://github.com/buildbetter-app/keycloakify-theme.git"
   },
   "type": "module",
+  "packageManager": "yarn@4.1.0",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
