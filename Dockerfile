@@ -1,9 +1,9 @@
 # build environment
 FROM node:24.22.1-alpine as build
 WORKDIR /app
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock .yarnrc.yml ./
 COPY script.js ./
-RUN yarn install
+RUN corepack enable && yarn install --immutable
 COPY . .
 RUN yarn build
 
